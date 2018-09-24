@@ -15,7 +15,9 @@ function checkTab(tab) {
     if (regex.test(tab.url)) {
         const matches = regex.exec(tab.url);
         const id = matches[5];
-        if (id === 'DKZlHoWPGDY') {
+        if (id === 'RWeFOe2Cs4k') {
+            const code = 'function onPlayerStateChange(state) { alert(JSON.stringify(state)); } var ytplayer = document.getElementById("ytplayer");ytplayer.addEventListener("onStateChange", "onPlayerStateChange");';
+            chrome.tabs.executeScript(tab.id, {code: code});
             alert('helal dogru video');
         }
     }

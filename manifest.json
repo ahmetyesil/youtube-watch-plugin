@@ -10,6 +10,17 @@
       "/assets/js/custom.js"
     ]
   },
+  "content_scripts": [
+    {
+      "js": [
+        "/assets/js/play-counter.js",
+        "/assets/js/page.js"
+      ],
+      "matches": [
+        "https://*.youtube.com/*"
+      ]
+    }
+  ],
   "permissions": [
     "tabs",
     "http://*/*",
