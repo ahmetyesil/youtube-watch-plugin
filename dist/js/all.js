@@ -13,7 +13,7 @@ RestClient = function (goptions) {
         errorRedirect: false
     };
 
-    var doAjax = function (method, gopts, opts) {
+    var doAjax = function (method, gopts, opts,success,error) {
         var dt = opts.dataType ? opts.dataType : (gopts.dataType ? gopts.dataType : constants.dataType);
 
 
@@ -35,31 +35,31 @@ RestClient = function (goptions) {
             async: opts.synchronous ? !opts.synchronous : (gopts.synchronous ? !gopts.synchronous
                 : !constants.synchronous)
         })).then(function success(data) {
-                console.log('data',data);
+                success(data);
             },
             function reject(jqxhr, text_status, error_thrown) {
-                console.log('reject',[jqxhr,text_status,error_thrown]);
+                error(jqxhr);
             },
-            function errorHandler(error) {
-                console.log('error',error);
+            function errorHandler(err) {
+                error(err);
             }
         )
     };
 
-    this.post = function (opts) {
-        doAjax('POST', this.goptions, opts);
+    this.post = function (opts,success,error) {
+        doAjax('POST', this.goptions, opts,success,error);
     };
 
-    this.put = function (opts) {
-        doAjax('PUT', this.goptions, opts);
+    this.put = function (opts,success,error) {
+        doAjax('PUT', this.goptions, opts,success,error);
     };
 
-    this.get = function (opts) {
-        doAjax('GET', this.goptions, opts);
+    this.get = function (opts,success,error) {
+        doAjax('GET', this.goptions, opts,success,error);
     };
 
-    this.remove = function (opts) {
-        doAjax('DELETE', this.goptions, opts);
+    this.remove = function (opts,success,error) {
+        doAjax('DELETE', this.goptions, opts,success,error);
     };
 };
 class loginModel {
@@ -80,28 +80,26 @@ class EnvironmentConstant {
         return 'http://api.v216.net';
     }
 }
-
-
 var rest = new RestClient({
-    url:EnvironmentConstant.API_URL,
-    dataType : 'json',
-    contentType : 'application/json',
-    processData : true,
-    timeout : 120000,
-    synchronous : false,
-    errorRedirect : false
+    url: EnvironmentConstant.API_URL,
+    dataType: 'json',
+    contentType: 'application/json',
+    processData: true,
+    timeout: 120000,
+    synchronous: false,
+    errorRedirect: false
 });
 
 /**
  * @param {loginModel} login_model The date
  */
-function login(login_model) {
+function login(login_model,success,error) {
 
     let data = {
-        path:ApiUrlsConstant.SESSION,
-        model:login_model,
+        path: ApiUrlsConstant.SESSION,
+        model: login_model,
     }
-    rest.post(data);
+    rest.post(data,success,error);
 }
 
 
@@ -144,11 +142,20 @@ function login(login_model) {
 
 
     $('#button-login').click(function () {
+        var ths = $(this);
+        ths.addClass('loading').attr('disabled','disabled');
         var login_model = new loginModel();
         login_model.email = $('#yt-login-email').val().toString();
         login_model.password = $('#yt-login-password').val().toString();
-        login(login_model);
-        pageRedirectByUrl(PAGE_INDEX);
+        login(login_model,function success(data) {
+           pageRedirectByUrl(PAGE_INDEX);
+           ths.removeClass('loading').removeAttr('disabled');
+        },
+        function error(err) {
+            ths.removeClass('loading').removeAttr('disabled');
+        }
+        );
+
     });
     $('#link-logout').click(function () {
         pageRedirectByUrl(PAGE_LOGIN);

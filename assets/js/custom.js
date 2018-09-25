@@ -37,11 +37,20 @@
 
 
     $('#button-login').click(function () {
+        var ths = $(this);
+        ths.addClass('loading').attr('disabled','disabled');
         var login_model = new loginModel();
         login_model.email = $('#yt-login-email').val().toString();
         login_model.password = $('#yt-login-password').val().toString();
-        login(login_model);
-        pageRedirectByUrl(PAGE_INDEX);
+        login(login_model,function success(data) {
+           pageRedirectByUrl(PAGE_INDEX);
+           ths.removeClass('loading').removeAttr('disabled');
+        },
+        function error(err) {
+            ths.removeClass('loading').removeAttr('disabled');
+        }
+        );
+
     });
     $('#link-logout').click(function () {
         pageRedirectByUrl(PAGE_LOGIN);

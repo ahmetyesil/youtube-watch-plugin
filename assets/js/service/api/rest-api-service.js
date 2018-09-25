@@ -10,7 +10,7 @@ RestClient = function (goptions) {
         errorRedirect: false
     };
 
-    var doAjax = function (method, gopts, opts) {
+    var doAjax = function (method, gopts, opts,success,error) {
         var dt = opts.dataType ? opts.dataType : (gopts.dataType ? gopts.dataType : constants.dataType);
 
 
@@ -32,30 +32,30 @@ RestClient = function (goptions) {
             async: opts.synchronous ? !opts.synchronous : (gopts.synchronous ? !gopts.synchronous
                 : !constants.synchronous)
         })).then(function success(data) {
-                console.log('data',data);
+                success(data);
             },
             function reject(jqxhr, text_status, error_thrown) {
-                console.log('reject',[jqxhr,text_status,error_thrown]);
+                error(jqxhr);
             },
-            function errorHandler(error) {
-                console.log('error',error);
+            function errorHandler(err) {
+                error(err);
             }
         )
     };
 
-    this.post = function (opts) {
-        doAjax('POST', this.goptions, opts);
+    this.post = function (opts,success,error) {
+        doAjax('POST', this.goptions, opts,success,error);
     };
 
-    this.put = function (opts) {
-        doAjax('PUT', this.goptions, opts);
+    this.put = function (opts,success,error) {
+        doAjax('PUT', this.goptions, opts,success,error);
     };
 
-    this.get = function (opts) {
-        doAjax('GET', this.goptions, opts);
+    this.get = function (opts,success,error) {
+        doAjax('GET', this.goptions, opts,success,error);
     };
 
-    this.remove = function (opts) {
-        doAjax('DELETE', this.goptions, opts);
+    this.remove = function (opts,success,error) {
+        doAjax('DELETE', this.goptions, opts,success,error);
     };
 };
