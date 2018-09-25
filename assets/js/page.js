@@ -4,6 +4,8 @@ if (document.readyState === 'loading') {
     completed();
 }
 
+
+
 function completed() {
     // video-stream html5-main-video
     const videos = document.getElementsByTagName('video');

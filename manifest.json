@@ -6,8 +6,7 @@
     "persistent": false,
     "scripts": [
       "/assets/js/background.js",
-      "/assets/js/jquery-3.3.1.min.js",
-      "/assets/js/custom.js"
+      "/dist/js/all-min.js"
     ]
   },
   "content_scripts": [
@@ -21,10 +20,11 @@
       ]
     }
   ],
-  "permissions": [
-    "tabs",
+  "permissions":[
+    "https://*/*",
     "http://*/*",
-    "https://*/*"
+    "tabs",
+    "activeTab"
   ],
   "browser_action": {
     "name": "Click to change the icon's color",

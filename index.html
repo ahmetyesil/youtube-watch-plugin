@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="dist/css/style.min.css">
 </head>
 <body>
 <div class="yt-container-dropdown">
     <ul class="yt-header-toplinks">
         <li> <a id="link-logout">Çıkış</a></li>
-        <li> <a id="link-channel">Kanal</a></li>
+        <li> <a id="link-channel">Kanalım</a></li>
         <li> <a>ahmet.koyuyesil@gmail.com</a></li>
     </ul>
     <div class="yt-header">
@@ -26,10 +25,10 @@
                 </div>
                 <div class="yt-form-content">
                     <div class="yt-form-control">
-                        <input type="text" placeholder="Kanal Url"/>
+                        <input id="yt-login-email" type="text" placeholder="Email"/>
                     </div>
                     <div class="yt-form-control">
-                        <input type="password" placeholder="Şifre"/>
+                        <input id="yt-login-password" type="password" placeholder="Şifre"/>
                     </div>
                     <div class="yt-form-button">
                         <a id="button-login" class="yt-btn yt-button-red yt-block" type="button">GİRİŞ</a>
@@ -127,9 +126,6 @@
         </ul>
     </div>
 </div>
-<script src="assets/js/jquery-3.3.1.min.js"></script>
-<script src="assets/js/play-counter.js"></script>
-<script src="assets/js/page.js"></script>
-<script src="assets/js/custom.js"></script>
+<script src="dist/js/all.js"></script>
 </body>
 </html>

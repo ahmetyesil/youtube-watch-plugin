@@ -19,22 +19,28 @@
             pageRedirectByUrl(s);
         })
     }
-    function pageRedirectByUrl(id){
-        if(id.indexOf('http') === -1)
-        {
-            $('.yt-pages').css('display','none');
+
+    function pageRedirectByUrl(id) {
+        if (id.indexOf('http') === -1) {
+            $('.yt-pages').css('display', 'none');
             $(id).fadeIn();
         }
     }
-    function locationHref(url){
+
+    function locationHref(url) {
         chrome.tabs.update(null, {
-            url:url
+            url: url
         });
     }
+
     pageRouting();
 
 
     $('#button-login').click(function () {
+        var login_model = new loginModel();
+        login_model.email = $('#yt-login-email').val().toString();
+        login_model.password = $('#yt-login-password').val().toString();
+        login(login_model);
         pageRedirectByUrl(PAGE_INDEX);
     });
     $('#link-logout').click(function () {
@@ -61,11 +67,6 @@
     })
 
 
-
-
-
-
-
     $('#button-watch-subs-like').click(function () {
         locationHref('https://www.youtube.com/watch?v=KklDe7HnbTY&list=PLs8GsV2H1tV8E9B6QzptvUwHXAN6sUxRI');
     });
@@ -75,12 +76,6 @@
     $('#button-skip').click(function () {
         alert('skip event')
     });
-
-
-
-
-
-
 
 
 })();
