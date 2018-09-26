@@ -24,7 +24,7 @@
     "jquery-rest-client": "^0.3.7",
     "jquery-ui": "^1.12.1",
     "jquery-ui-dist": "^1.12.1",
-    "jquery-validation": "^1.17.0",
+    "jquery-validation": "^1.18.0",
     "normalize.css": "^8.0.0"
   },
   "devDependencies": {

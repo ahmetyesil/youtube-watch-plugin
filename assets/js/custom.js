@@ -9,75 +9,89 @@
     let TOS_URL = 'https://www.ytwatch.com/tos';
     let FAQ_URL = 'https://www.ytwatch.com/faq';
 
-
-    function pageRouting() {
-        let current_page = '#yt-login';
-        $(current_page).fadeIn();
-        $('a[href]').click(function () {
-            let t = $(this);
-            let s = t.attr('href');
-            pageRedirectByUrl(s);
-        })
-    }
-
-    function pageRedirectByUrl(id) {
-        if (id.indexOf('http') === -1) {
-            $('.yt-pages').css('display', 'none');
-            $(id).fadeIn();
-        }
-    }
-
-    function locationHref(url) {
-        chrome.tabs.update(null, {
-            url: url
-        });
-    }
-
-    pageRouting();
+    var loading_service = new LoadingService();
+    var routing_service = new RoutingService();
 
 
-    $('#button-login').click(function () {
-        var ths = $(this);
-        ths.addClass('loading').attr('disabled','disabled');
+    loginForm();
+    routing_service.pageRouting();
+
+    // Login API START
+
+    function loginForm(){
         var login_model = new loginModel();
-        login_model.email = $('#yt-login-email').val().toString();
-        login_model.password = $('#yt-login-password').val().toString();
-        login(login_model,function success(data) {
-           pageRedirectByUrl(PAGE_INDEX);
-           ths.removeClass('loading').removeAttr('disabled');
-        },
-        function error(err) {
-            ths.removeClass('loading').removeAttr('disabled');
-        }
+        login_model.email = 'arge@bynogame.com';
+        login_model.password = '123456';
+        // login_model.email = $('#yt-login-email').val().toString();
+        // login_model.password = $('#yt-login-password').val().toString();
+        loading_service.open('.yt-loading');
+        login(login_model, function success(data) {
+                routing_service.pageRedirectByUrl(PAGE_INDEX);
+                loading_service.close('.yt-loading');
+            },
+            function error(err) {
+                loading_service.close('.yt-loading');
+            }
         );
+    }
 
+    // Login API END
+
+
+
+    // Login form validation START
+
+    $('#button-login').click(function () {});
+    $("#yt-login-form").validate({
+
+        rules: {
+            'yt-login-email': {
+                required: true,
+                email: true
+            },
+            'yt-login-password': {
+                required: true
+            }
+        },
+        messages: {
+             'yt-login-email': 'Lütfen geçerli email giriniz.',
+             'yt-login-password': 'Lütfen 6 haneli şifrenizi giriniz.',
+        },
+        submitHandler: function () {
+            loginForm();
+        }
     });
+
+    // Login form validation END
+
+
+
     $('#link-logout').click(function () {
-        pageRedirectByUrl(PAGE_LOGIN);
+        routing_service.pageRedirectByUrl(PAGE_LOGIN);
     });
     $('#link-channel').click(function () {
-        locationHref('https://www.youtube.com/channel/UCve_taYp1VAd_WWg0lDMNlg?view_as=subscriber');
+        routing_service.locationHref('https://www.youtube.com/channel/UCve_taYp1VAd_WWg0lDMNlg?view_as=subscriber');
     })
     $('#button-register').click(function () {
-        pageRedirectByUrl(PAGE_INDEX);
+        routing_service.pageRedirectByUrl(PAGE_INDEX);
     });
     $('#button-new-password').click(function () {
 
     });
 
     $('#link-payment').click(function () {
-        locationHref(PAYMENT_URL);
+        routing_service.locationHref(PAYMENT_URL);
     })
     $('#link-tos').click(function () {
-        locationHref(TOS_URL);
+        routing_service.locationHref(TOS_URL);
     })
     $('#link-faq').click(function () {
-        locationHref(FAQ_URL);
+        routing_service.locationHref(FAQ_URL);
     })
 
 
     $('#button-watch-subs-like').click(function () {
-        locationHref('https://www.youtube.com/watch?v=KklDe7HnbTY&list=PLs8GsV2H1tV8E9B6QzptvUwHXAN6sUxRI');
+        routing_service.locationHref('https://www.youtube.com/watch?v=KklDe7HnbTY&list=PLs8GsV2H1tV8E9B6QzptvUwHXAN6sUxRI');
     });
     $('#button-confirm').click(function () {
         alert('confirm event')

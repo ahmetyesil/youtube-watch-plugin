@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="dist/css/style.min.css">
 </head>
 <body>
+<div class="yt-loading"><div></div><div></div><div></div><div></div></div>
 <div class="yt-container-dropdown">
     <ul class="yt-header-toplinks">
         <li> <a id="link-logout">Çıkış</a></li>
@@ -21,23 +22,25 @@
 
             <!-- LOGIN PAGE -->
             <div id="yt-login" class="yt-pages yt-form">
+                <form id="yt-login-form">
                 <div class="yt-form-header">
                 </div>
                 <div class="yt-form-content">
                     <div class="yt-form-control">
-                        <input id="yt-login-email" type="text" placeholder="Email"/>
+                        <input id="yt-login-email" name="yt-login-email" type="text"  placeholder="Email"/>
                     </div>
                     <div class="yt-form-control">
-                        <input id="yt-login-password" type="password" placeholder="Şifre"/>
+                        <input id="yt-login-password" name="yt-login-password" type="password"  placeholder="Şifre"/>
                     </div>
                     <div class="yt-form-button">
-                        <button id="button-login" class="yt-btn yt-button-red yt-block" type="button"><div class="yt-button-loading"></div> GİRİŞ</button>
+                        <button id="button-login" class="yt-btn yt-button-red yt-block" type="submit"> GİRİŞ</button>
                     </div>
                 </div>
                 <div class="yt-form-footer">
                     <a href="#yt-register">Kayıt ol</a>
                     <a href="#yt-forgot-password" class="margin-left-5">Şifremi Unuttum</a>
                 </div>
+                </form>
             </div>
         <!-- LOGIN PAGE -->
 
@@ -106,8 +109,6 @@
                     <a id="button-watch-subs-like"  class="yt-btn yt-button-red yt-block margin-top-10">İZLE & ABONE OL & BEĞEN</a>
                     <!--<a id="button-confirm" class="yt-btn yt-button-green yt-block margin-top-10">ONAYLA</a>-->
                     <!--<a id="button-skip" class="yt-btn yt-button-orange yt-block margin-top-10">ATLA</a>-->
-                    <a class="yt-btn yt-button-red yt-block margin-top-10" target="_blank" href="https://www.youtube.com/watch?v=DKZlHoWPGDY"> Dogru video </a>
-                    <br><a class="yt-btn yt-button-red yt-block margin-top-10" target="_blank" href="https://www.youtube.com/watch?v=oe7hSotOYxE">Yanlis video </a>
                 </div>
             </div>
             <div class="yt-form-footer">

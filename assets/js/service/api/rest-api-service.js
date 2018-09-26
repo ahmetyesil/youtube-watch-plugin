@@ -12,7 +12,7 @@ RestClient = function (goptions) {
 
     var doAjax = function (method, gopts, opts,success,error) {
         var dt = opts.dataType ? opts.dataType : (gopts.dataType ? gopts.dataType : constants.dataType);
-
+        console.log('dt',dt);
 
         $.when($.ajax({
             type: method,
@@ -29,18 +29,15 @@ RestClient = function (goptions) {
 
             complete: opts.complete ? opts.complete : (gopts.complete ? gopts.complete : function () {
             }),
+            success : opts.success ? opts.success : (gopts.success ? gopts.success : function(data) {
+                success(data);
+            }),
+            error:opts.error ? opts.error : (gopts.error ? gopts.error : function(req, status, ex) {
+                error(req);
+            }),
             async: opts.synchronous ? !opts.synchronous : (gopts.synchronous ? !gopts.synchronous
                 : !constants.synchronous)
-        })).then(function success(data) {
-                success(data);
-            },
-            function reject(jqxhr, text_status, error_thrown) {
-                error(jqxhr);
-            },
-            function errorHandler(err) {
-                error(err);
-            }
-        )
+        }));
     };
 
     this.post = function (opts,success,error) {
