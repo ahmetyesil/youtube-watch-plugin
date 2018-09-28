@@ -42,12 +42,13 @@ gulp.task('jshint', function () {
         './node_modules/jquery-validation/dist/jquery.validate.min.js',
         './assets/js/service/api/rest-api-service.js',
         './assets/js/model/login-model.js',
+        './assets/js/constant/site-info-constant.js',
         './assets/js/constant/api-urls-constant.js',
         './assets/js/constant/environment-constant.js',
         './assets/js/service/api/api-service.js',
         './assets/js/service/common/loading-service.js',
         './assets/js/service/common/routing-service.js',
-        './assets/js/custom.js'
+        './assets/js/index.js'
     ])
         .pipe(concat('./dist/js/all.js'))
         .pipe(minify())

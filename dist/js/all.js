@@ -71,9 +71,41 @@ class loginModel {
         this.password = null;
     }
 }
+class SiteInfoConstant {
+    static get PAGE_LOGIN() {
+        return '#yt-login';
+    }
+    static get PAGE_REGISTER() {
+        return '#yt-register';
+    }
+    static get PAGE_FORGOT_PASSWORD() {
+        return '#yt-forgot_password';
+    }
+    static get PAGE_INDEX() {
+        return '#yt-index';
+    }
+    static get PAYMENT_URL() {
+        return 'https://www.ytwatch.com/payment';
+    }
+    static get TOS_URL() {
+        return 'https://www.ytwatch.com/tos';
+    }
+    static get FAQ_URL() {
+        return 'https://www.ytwatch.com/faq';
+    }
+
+
+
+}
 class ApiUrlsConstant {
     static get SESSION() {
         return '/session';
+    }
+    static get REGISTER() {
+        return '/user/create';
+    }
+    static get FORGOT_PASSWORD() {
+        return '/user/forgot-password';
     }
 }
 class EnvironmentConstant {
@@ -104,6 +136,32 @@ function login(login_model,success,error) {
 }
 
 
+/**
+ * @param {registerModel} register_model The date
+ */
+function register(register_model,success,error) {
+
+    let data = {
+        path: ApiUrlsConstant.REGISTER,
+        model: register_model,
+    }
+    rest.post(data,success,error);
+}
+
+
+/**
+ * @param {forgotPasswordModel} forgot_password_model The date
+ */
+function forgotPassword(forgot_password_model,success,error) {
+
+    let data = {
+        path: ApiUrlsConstant.FORGOT_PASSWORD,
+        model: forgot_password_model,
+    }
+    rest.post(data,success,error);
+}
+
+
 class LoadingService {
     constructor() {
         LoadingService.instance = this;
@@ -119,20 +177,9 @@ class LoadingService {
 
 
 
-
 class RoutingService {
     constructor() {
         RoutingService.instance = this;
-    }
-
-    pageRouting() {
-        let current_page = '#yt-login';
-        $(current_page).fadeIn();
-        $('a[href]').click(function () {
-            let t = $(this);
-            let s = t.attr('href');
-            pageRedirectByUrl(s);
-        });
     }
 
     pageRedirectByUrl(id) {
@@ -147,27 +194,31 @@ class RoutingService {
             url: url
         });
     }
+
+    pageRouting() {
+        let current_page = '#yt-login';
+        let $this = this;
+        $(current_page).fadeIn();
+        $('a[href]').click(function () {
+            let t = $(this);
+            let s = t.attr('href');
+            $this.pageRedirectByUrl(s);
+        });
+    }
+
+
 }
 (function () {
 
-    let PAGE_LOGIN = '#yt-login';
-    let PAGE_REGISTER = '#yt-register';
-    let PAGE_FORGOT_PASSWORD = '#yt-forgot_password';
-    let PAGE_INDEX = '#yt-index';
-
-    let PAYMENT_URL = 'https://www.ytwatch.com/payment';
-    let TOS_URL = 'https://www.ytwatch.com/tos';
-    let FAQ_URL = 'https://www.ytwatch.com/faq';
-
     var loading_service = new LoadingService();
     var routing_service = new RoutingService();
-    loginForm();
 
+
+    loginForm();
     routing_service.pageRouting();
 
     // Login API START
-
-    function loginForm(){
+    function loginForm() {
         var login_model = new loginModel();
         login_model.email = 'arge@bynogame.com';
         login_model.password = '123456';
@@ -175,7 +226,7 @@ class RoutingService {
         // login_model.password = $('#yt-login-password').val().toString();
         loading_service.open('.yt-loading');
         login(login_model, function success(data) {
-                routing_service.pageRedirectByUrl(PAGE_INDEX);
+                routing_service.pageRedirectByUrl(SiteInfoConstant.PAGE_INDEX);
                 loading_service.close('.yt-loading');
             },
             function error(err) {
@@ -184,13 +235,6 @@ class RoutingService {
         );
     }
 
-    // Login API END
-
-
-
-    // Login form validation START
-
-    $('#button-login').click(function () {});
     $("#yt-login-form").validate({
 
         rules: {
@@ -203,39 +247,117 @@ class RoutingService {
             }
         },
         messages: {
-             'yt-login-email': 'Lütfen geçerli email giriniz.',
-             'yt-login-password': 'Lütfen 6 haneli şifrenizi giriniz.',
+            'yt-login-email': 'Lütfen geçerli email giriniz.',
+            'yt-login-password': 'Lütfen 6 haneli şifrenizi giriniz.',
         },
         submitHandler: function () {
             loginForm();
         }
     });
+    // Login API END
 
-    // Login form validation END
 
+    // register API START
+    function registerForm() {
+        var register_model = new registerModel();
+        register_model.email = $('#yt-register-email').val().toString();
+        register_model.channel_url = $('#yt-register-channel-url').val().toString();
+        register_model.password = $('#yt-register-password').val().toString();
+        register_model.password_confirm = $('#yt-register-password-confirm').val().toString();
+        if (register_model.password === register_model.password_confirm) {
+            loading_service.open('.yt-loading');
+            register(register_model, function success(data) {
+                    routing_service.pageRedirectByUrl(SiteInfoConstant.PAGE_INDEX);
+                    loading_service.close('.yt-loading');
+                },
+                function error(err) {
+                    loading_service.close('.yt-loading');
+                }
+            );
+        }
+
+    }
+
+    $("#yt-register-form").validate({
+
+        rules: {
+            'yt-register-email': {
+                required: true,
+                email: true
+            },
+            'yt-register-channel-url': {
+                required: true,
+                email: true
+            },
+            'yt-register-password': {
+                required: true
+            },
+            'yt-register-password-confirm': {
+                required: true,
+                equalTo: "#yt-register-password"
+            }
+        },
+        messages: {
+            'yt-register-email': 'Lütfen gmail adresinizi giriniz.',
+            'yt-register-channel-url': 'Lütfen youtube kanal linkinizi giriniz',
+            'yt-register-password': 'Lütfen 6 haneli şifrenizi oluşturunuz.',
+            'yt-register-password-confirm': 'Lütfen 6 haneli şifrenizi tekrar giriniz.',
+        },
+        submitHandler: function () {
+            registerForm();
+        }
+    });
+    // register API END
+
+
+    // Forgot Password API START
+    function forgotPasswordForm() {
+        var forgot_password_model = new forgotPasswordModel();
+        forgot_password_model.email = $('#yt-forgot-password-email').val().toString();
+        loading_service.open('.yt-loading');
+        forgotPassword(forgot_password_model, function success(data) {
+                routing_service.pageRedirectByUrl(SiteInfoConstant.PAGE_LOGIN);
+                loading_service.close('.yt-loading');
+            },
+            function error(err) {
+                loading_service.close('.yt-loading');
+            }
+        );
+    }
+
+    $("#yt-forgot-password-form").validate({
+        rules: {
+            'yt-forgot-password-email': {
+                required: true,
+                email: true
+            }
+        },
+        messages: {
+            'yt-forgot-password-email': 'Lütfen sisteme kayıtlı email adresinizi giriniz.',
+
+        },
+        submitHandler: function () {
+            forgotPasswordForm();
+        }
+    });
+    // Forgot Password API END
 
 
     $('#link-logout').click(function () {
-        routing_service.pageRedirectByUrl(PAGE_LOGIN);
+        routing_service.pageRedirectByUrl(SiteInfoConstant.PAGE_LOGIN);
     });
     $('#link-channel').click(function () {
         routing_service.locationHref('https://www.youtube.com/channel/UCve_taYp1VAd_WWg0lDMNlg?view_as=subscriber');
     })
-    $('#button-register').click(function () {
-        routing_service.pageRedirectByUrl(PAGE_INDEX);
-    });
-    $('#button-new-password').click(function () {
-
-    });
 
     $('#link-payment').click(function () {
-        routing_service.locationHref(PAYMENT_URL);
+        routing_service.locationHref(SiteInfoConstant.PAYMENT_URL);
     })
     $('#link-tos').click(function () {
-        routing_service.locationHref(TOS_URL);
+        routing_service.locationHref(SiteInfoConstant.TOS_URL);
     })
     $('#link-faq').click(function () {
-        routing_service.locationHref(FAQ_URL);
+        routing_service.locationHref(SiteInfoConstant.FAQ_URL);
     })
 
 

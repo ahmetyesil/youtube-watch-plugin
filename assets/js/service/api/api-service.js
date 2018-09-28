@@ -20,3 +20,29 @@ function login(login_model,success,error) {
     rest.post(data,success,error);
 }
 
+
+/**
+ * @param {registerModel} register_model The date
+ */
+function register(register_model,success,error) {
+
+    let data = {
+        path: ApiUrlsConstant.REGISTER,
+        model: register_model,
+    }
+    rest.post(data,success,error);
+}
+
+
+/**
+ * @param {forgotPasswordModel} forgot_password_model The date
+ */
+function forgotPassword(forgot_password_model,success,error) {
+
+    let data = {
+        path: ApiUrlsConstant.FORGOT_PASSWORD,
+        model: forgot_password_model,
+    }
+    rest.post(data,success,error);
+}
+

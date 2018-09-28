@@ -1,17 +1,6 @@
-
 class RoutingService {
     constructor() {
         RoutingService.instance = this;
-    }
-
-    pageRouting() {
-        let current_page = '#yt-login';
-        $(current_page).fadeIn();
-        $('a[href]').click(function () {
-            let t = $(this);
-            let s = t.attr('href');
-            pageRedirectByUrl(s);
-        });
     }
 
     pageRedirectByUrl(id) {
@@ -26,4 +15,17 @@ class RoutingService {
             url: url
         });
     }
+
+    pageRouting() {
+        let current_page = '#yt-login';
+        let $this = this;
+        $(current_page).fadeIn();
+        $('a[href]').click(function () {
+            let t = $(this);
+            let s = t.attr('href');
+            $this.pageRedirectByUrl(s);
+        });
+    }
+
+
 }
