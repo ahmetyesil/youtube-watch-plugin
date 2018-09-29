@@ -1,7 +1,9 @@
 (function () {
 
     var loading_service = new LoadingService();
+    var alert_service = new AlertService();
     var routing_service = new RoutingService();
+    var http_status_service = new HttpStatusService();
 
 
     loginForm();
@@ -18,9 +20,11 @@
         login(login_model, function success(data) {
                 routing_service.pageRedirectByUrl(SiteInfoConstant.PAGE_INDEX);
                 loading_service.close('.yt-loading');
+                http_status_service.successHandler(data);
             },
             function error(err) {
                 loading_service.close('.yt-loading');
+                http_status_service.errorHandler(err);
             }
         );
     }

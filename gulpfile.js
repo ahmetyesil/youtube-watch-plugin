@@ -47,6 +47,8 @@ gulp.task('jshint', function () {
         './assets/js/constant/environment-constant.js',
         './assets/js/service/api/api-service.js',
         './assets/js/service/common/loading-service.js',
+        './assets/js/service/common/alert-service.js',
+        './assets/js/service/common/http-status-service.js',
         './assets/js/service/common/routing-service.js',
         './assets/js/index.js'
     ])

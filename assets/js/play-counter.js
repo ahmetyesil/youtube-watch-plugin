@@ -1,6 +1,7 @@
 class PlayCounter {
     constructor() {
         this.video = null;
+        this.email = null;
         this.is_counting = false;
         this.current_counter = 0;
         this.video_number_list = [];
@@ -34,7 +35,9 @@ class PlayCounter {
         this.video.onseeked = () => {
             this.onSeeked();
         };
-
+        this.video.ontimeupdate = () => {
+            this.onTimeUpdate();
+        };
         this.interval = setInterval(() => {
             this.count();
         }, 1000);
@@ -43,6 +46,13 @@ class PlayCounter {
     onVideoPlay() {
         alert('Video başlaltıldı');
         this.is_counting = true;
+        document.getElementById('avatar-btn').click();
+        const email = document.getElementById('email');
+        if(email){
+            this.email = email.getAttribute('title');
+            console.log('email',email);
+        }
+
     }
 
     onVideoEnded() {
@@ -50,7 +60,12 @@ class PlayCounter {
         this.is_counting = false;
         this.finish();
     }
+    onTimeUpdate(){
+        
+        console.log('this.video.currentTime',  this.formatTime(this.video.currentTime));
+        console.log('this.video.duration',this.formatTime(this.video.duration));
 
+    }
     onPause() {
         alert('video durdu.');
         this.is_counting = false;
@@ -85,10 +100,26 @@ class PlayCounter {
         this.video.onpause = null;
         this.video.onseeking = null;
         this.video.onseeked = null;
+        this.video.ontimeupdate = null;
 
         if (this.interval === null) {
             clearInterval(this.interval);
             this.interval = null;
         }
     }
+
+
+    formatTime(seconds) {
+
+        var minutes = Math.floor(seconds / 60);
+        var secs= Math.floor(seconds % 60);
+        if (minutes < 10) {
+            minutes = '0' + minutes;
+        }
+        if (secs < 10) {
+            secs = '0' + secs;
+        }
+        return minutes +  ':' + secs;
+    }
+
 }
