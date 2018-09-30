@@ -61,7 +61,7 @@ class PlayCounter {
         this.finish();
     }
     onTimeUpdate(){
-        
+
         console.log('this.video.currentTime',  this.formatTime(this.video.currentTime));
         console.log('this.video.duration',this.formatTime(this.video.duration));
 
