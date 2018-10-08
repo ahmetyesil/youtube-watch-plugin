@@ -1,3 +1,7 @@
+
+
+var storage_service = new StorageService();
+var routing_service = new RoutingService();
 var rest = new RestClient({
     url: EnvironmentConstant.API_URL,
     dataType: 'json',
@@ -9,40 +13,49 @@ var rest = new RestClient({
 });
 
 /**
- * @param {loginModel} login_model The date
+ * @param {Session}  The date
  */
-function login(login_model,success,error) {
-
+function getSessionUrl(success, error) {
     let data = {
-        path: ApiUrlsConstant.SESSION,
-        model: login_model,
+        path: ApiUrlsConstant.SESSION + '/google',
     }
-    rest.post(data,success,error);
+    rest.get(data, success, error);
 }
 
 
 /**
  * @param {registerModel} register_model The date
  */
-function register(register_model,success,error) {
-
-    let data = {
-        path: ApiUrlsConstant.REGISTER,
-        model: register_model,
+function createSession(success, error) {
+    const params = routing_service.parseQuery(window.location.search.substring(1));
+    const code = params['code'];
+    if (code) {
+        const google_session_create_model = new GoogleSessionCreateModel();
+        google_session_create_model.code = code;
+        let data = {
+            path: ApiUrlsConstant.SESSION + '/google',
+            model: google_session_create_model,
+        }
+        rest.post(data, function (response) {
+            storage_service.setUserModel(response.data);
+            success(response);
+        }, function (err) {
+            error(err);
+        });
     }
-    rest.post(data,success,error);
+
 }
 
 
 /**
  * @param {forgotPasswordModel} forgot_password_model The date
  */
-function forgotPassword(forgot_password_model,success,error) {
+function forgotPassword(forgot_password_model, success, error) {
 
     let data = {
         path: ApiUrlsConstant.FORGOT_PASSWORD,
         model: forgot_password_model,
     }
-    rest.post(data,success,error);
+    rest.post(data, success, error);
 }
 

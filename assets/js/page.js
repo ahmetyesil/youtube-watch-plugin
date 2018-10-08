@@ -12,7 +12,6 @@ function completed() {
     const videos = document.getElementsByTagName('video');
     // atr_challenge : bu input[type=hidden] elementinde videonun id bilgileri bulunuyor. kullanabiliriz.
 
-
     const video = videos[0];
     console.log('video',video);
     if (video) {

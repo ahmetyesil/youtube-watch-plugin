@@ -1,12 +1,20 @@
 class PlayCounter {
     constructor() {
         this.video = null;
-        this.email = null;
         this.is_counting = false;
         this.current_counter = 0;
         this.video_number_list = [];
         this.interval = null;
         PlayCounter.instance = this;
+        createSession(function success(response) {
+                routing_service.pageRedirectByUrl(SiteInfoConstant.PAGE_INDEX);
+                console.log('response',response)
+            },
+            function error(err) {
+                loading_service.close('.yt-loading');
+                http_status_service.errorHandler(err);
+            }
+        );
     }
 
     static create(video) {

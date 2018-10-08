@@ -10,6 +10,9 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     }
 });
 
+chrome.runtime.getBackgroundPage(function(bgWindow) {
+
+});
 
 function checkTab(tab) {
     const regex = /(youtu\.be\/|youtube\.com\/(watch\?(.*&)?v=|(embed|v)\/))([^\?&"'>]+)/;

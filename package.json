@@ -25,7 +25,8 @@
     "jquery-ui": "^1.12.1",
     "jquery-ui-dist": "^1.12.1",
     "jquery-validation": "^1.18.0",
-    "normalize.css": "^8.0.0"
+    "normalize.css": "^8.0.0",
+    "querystring": "^0.2.0"
   },
   "devDependencies": {
     "browser-sync": "^2.24.6",

@@ -11,6 +11,7 @@ class AlertService {
         if(duration){
            var timeout = setTimeout(function () {
                alert.fadeOut(function () {
+                   alert.removeClass('yt-alert-'+type);
                    clearTimeout(timeout);
                });
 
