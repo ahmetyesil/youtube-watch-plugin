@@ -16,7 +16,11 @@
         "/assets/js/page.js"
       ],
       "matches": [
-        "https://*.youtube.com/*"
+        "https://*.youtube.com/*",
+        "https://accounts.google.com/*",
+        "https://*.ytizlen.com/*",
+        "http://*.ytizlen.com/*",
+        "http://localhost:4200/*"
       ]
     }
   ],

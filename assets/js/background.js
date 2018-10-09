@@ -26,3 +26,19 @@ function checkTab(tab) {
         }
     }
 }
+
+
+chrome.tabs.onUpdated.addListener(
+    function(tabId, changeInfo, tab) {
+        // read changeInfo data
+        if (changeInfo.url) {
+            // url has changed; do something here
+            // like send message to content script
+            alert('changeInfo.url:' + changeInfo.url);
+            chrome.tabs.sendMessage( tabId, {
+                message: 'hello!',
+                url: changeInfo.url
+            })
+        }
+    }
+);
