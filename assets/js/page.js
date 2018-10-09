@@ -6,26 +6,22 @@ if (document.readyState === 'loading') {
 }
 
 
-
 function completed() {
     // video-stream html5-main-video
     const videos = document.getElementsByTagName('video');
     // atr_challenge : bu input[type=hidden] elementinde videonun id bilgileri bulunuyor. kullanabiliriz.
 
     const video = videos[0];
-    console.log('video',video);
+    console.log('video', video);
     if (video) {
         PlayCounter.create(video);
     }
 }
 
 
-
 chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-        // listen for messages sent from background.js
-        if (request.message === 'hello!') {
-            alert('contente geçti:'+request.url);
-            // new url is now in content scripts!
-        }
+    function (request, sender, sendResponse) {
+        chrome.storage.local.get(['login-redirect-url'], function (result) {
+            alert('Value currently is ' + result.key);
+        });
     });

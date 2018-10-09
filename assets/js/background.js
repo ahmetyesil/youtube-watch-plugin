@@ -10,8 +10,10 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     }
 });
 
-chrome.runtime.getBackgroundPage(function(bgWindow) {
-
+chrome.browserAction.onClicked.addListener(function(tab) {
+    chrome.tabs.update(tab.id, {
+        url: "http://localhost:4200"
+    });
 });
 
 function checkTab(tab) {
@@ -31,14 +33,15 @@ function checkTab(tab) {
 chrome.tabs.onUpdated.addListener(
     function(tabId, changeInfo, tab) {
         // read changeInfo data
-        if (changeInfo.url) {
+        if (changeInfo.url && changeInfo.url.indexOf('http://localhost:4200/?code=') > -1) {
             // url has changed; do something here
             // like send message to content script
-            alert('changeInfo.url:' + changeInfo.url);
-            chrome.tabs.sendMessage( tabId, {
-                message: 'hello!',
-                url: changeInfo.url
-            })
+            chrome.storage.sync.set({'login-redirect-url': changeInfo.url}, function() {
+                chrome.tabs.sendMessage( tabId, {
+                    url: changeInfo.url
+                })
+            });
+
         }
     }
 );
