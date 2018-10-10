@@ -2,20 +2,45 @@ var loading_service = new LoadingService();
 var alert_service = new AlertService();
 var routing_service = new RoutingService();
 var http_status_service = new HttpStatusService();
-
-
+var storage_service = new StorageService();
+var session = new Session();
 // Login API START
 function login() {
     loading_service.open('.yt-loading');
-    getSessionUrl(function success(response) {
-            loading_service.close('.yt-loading');
-            routing_service.locationHref(response.data);
-        },
-        function error(err) {
-            loading_service.close('.yt-loading');
-            http_status_service.errorHandler(err);
-        }
-    );
+    const session_id = storage_service.get('session_id');
+    if(session_id){
+        getSession(session_id,function success(response) {
+                routing_service.pageRedirectByUrl(SiteInfoConstant.PAGE_INDEX);
+                loading_service.close('.yt-loading');
+                session = response.data;
+                loginManagement();
+            },
+            function error(err) {
+                loading_service.close('.yt-loading');
+                http_status_service.errorHandler(err);
+                logoutManagement();
+            }
+        );
+    }else{
+        getSessionUrl(function success(response) {
+                loading_service.close('.yt-loading');
+                routing_service.locationHref(response.data);
+            },
+            function error(err) {
+                loading_service.close('.yt-loading');
+                http_status_service.errorHandler(err);
+            }
+        );
+    }
+}
+
+
+function loginManagement(){
+    $('.yt-header-toplinks').addClass('show');
+    $('#link-username').text(session.name);
+}
+function logoutManagement(){
+    $('.yt-header-toplinks').removeClass('show');
 }
 
 $('#button-login').click(function () {
@@ -24,20 +49,25 @@ $('#button-login').click(function () {
 
 $('#link-logout').click(function () {
     routing_service.pageRedirectByUrl(SiteInfoConstant.PAGE_LOGIN);
+    storage_service.removeSessionID();
+    storage_service.removeUserData();
+    logoutManagement();
 });
-$('#link-channel').click(function () {
-    routing_service.locationHref('https://www.youtube.com/channel/UCve_taYp1VAd_WWg0lDMNlg?view_as=subscriber');
-})
 
-$('#link-payment').click(function () {
-    routing_service.locationHref(SiteInfoConstant.PAYMENT_URL);
-})
+
+$('#link-videos').click(function () {
+    routing_service.locationHref(SiteInfoConstant.VIDEOS);
+});
+
+$('#link-buy').click(function () {
+    routing_service.locationHref(SiteInfoConstant.BUY_URL);
+});
 $('#link-tos').click(function () {
     routing_service.locationHref(SiteInfoConstant.TOS_URL);
-})
+});
 $('#link-faq').click(function () {
     routing_service.locationHref(SiteInfoConstant.FAQ_URL);
-})
+});
 
 
 $('#button-watch-subs-like').click(function () {
@@ -51,22 +81,6 @@ $('#button-skip').click(function () {
 });
 
 (function () {
-    console.log(' location.href ', location.href);
-    createSession(function success(response) {
-            routing_service.pageRedirectByUrl(SiteInfoConstant.PAGE_INDEX);
-            console.log('response', response)
-        },
-        function error(err) {
-            loading_service.close('.yt-loading');
-            http_status_service.errorHandler(err);
-        }
-    );
+    login();
 })();
 
-chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-        // listen for messages sent from background.js
-        if (request.message === 'hello!') {
-            console.log(request.url) // new url is now in content scripts!
-        }
-    });

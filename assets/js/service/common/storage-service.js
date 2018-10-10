@@ -23,9 +23,27 @@ class StorageService {
         localStorage.removeItem('session_id');
     }
 
+    removeUserData(){
+        localStorage.removeItem('user_model');
+    }
+
     getSessionID() {
         return localStorage.getItem('session_id');
     }
+
+
+    get(key) {
+        console.log('localStorage.getItem(key)',localStorage.getItem(key));
+        if(localStorage.getItem(key))
+        return localStorage.getItem(key).replace(/"/g,'');
+    }
+
+    set(key,value) {
+        localStorage.setItem(key,value);
+    }
+
+
+
 }
 
 

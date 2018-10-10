@@ -27,23 +27,44 @@ function getSessionUrl(success, error) {
  * @param {registerModel} register_model The date
  */
 function createSession(success, error) {
-    const params = routing_service.parseQuery(window.location.search.substring(1));
-    const code = params['code'];
-    if (code) {
-        const google_session_create_model = new GoogleSessionCreateModel();
-        google_session_create_model.code = code;
-        let data = {
-            path: ApiUrlsConstant.SESSION + '/google',
-            model: google_session_create_model,
-        }
-        rest.post(data, function (response) {
-            storage_service.setUserModel(response.data);
-            success(response);
-        }, function (err) {
-            error(err);
-        });
-    }
+    // const params = routing_service.parseQuery(storage_service.get('login-redirect-url').split('?')[1]);
+    // const code = params['code'];
+    // if (code) {
+    //     const google_session_create_model = new GoogleSessionCreateModel();
+    //     google_session_create_model.code = code;
+    //     let data = {
+    //         path: ApiUrlsConstant.SESSION + '/google',
+    //         model: {
+    //             code : code
+    //         },
+    //     }
+    //     console.log('data',data);
+    //     rest.post(data, function (response) {
+    //         storage_service.setUserModel(response.data);
+    //         success(response);
+    //     }, function (err) {
+    //         error(err);
+    //     });
+    // }
 
+}
+
+
+/**
+ * @param {string} session_id The date
+ */
+function getSession(session_id,success, error) {
+    let data = {
+        path: ApiUrlsConstant.SESSION + '/'+session_id,
+    }
+    rest.get(data, function (response) {
+        console.log('response',response);
+        storage_service.setUserModel(response.data);
+        success(response);
+    }, function (err) {
+        console.log('err',err);
+        error(err)
+    });
 }
 
 

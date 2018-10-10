@@ -92,16 +92,19 @@ class SiteInfoConstant {
     static get PAGE_INDEX() {
         return '#yt-index';
     }
-    static get PAYMENT_URL() {
-        return 'https://www.ytwatch.com/payment';
+    static get BUY_URL() {
+        return 'https://www.ytizlen.com/buy';
     }
     static get TOS_URL() {
-        return 'https://www.ytwatch.com/tos';
+        return 'https://www.ytizlen.com/tos';
     }
     static get FAQ_URL() {
-        return 'https://www.ytwatch.com/faq';
+        return 'https://www.ytizlen.com/faq';
     }
 
+    static get VIDEOS() {
+        return 'https://www.ytizlen.com/profile/videos';
+    }
 
 
 }
@@ -146,9 +149,27 @@ class StorageService {
         localStorage.removeItem('session_id');
     }
 
+    removeUserData(){
+        localStorage.removeItem('user_model');
+    }
+
     getSessionID() {
         return localStorage.getItem('session_id');
     }
+
+
+    get(key) {
+        console.log('localStorage.getItem(key)',localStorage.getItem(key));
+        if(localStorage.getItem(key))
+        return localStorage.getItem(key).replace(/"/g,'');
+    }
+
+    set(key,value) {
+        localStorage.setItem(key,value);
+    }
+
+
+
 }
 
 
@@ -232,23 +253,44 @@ function getSessionUrl(success, error) {
  * @param {registerModel} register_model The date
  */
 function createSession(success, error) {
-    const params = routing_service.parseQuery(window.location.search.substring(1));
-    const code = params['code'];
-    if (code) {
-        const google_session_create_model = new GoogleSessionCreateModel();
-        google_session_create_model.code = code;
-        let data = {
-            path: ApiUrlsConstant.SESSION + '/google',
-            model: google_session_create_model,
-        }
-        rest.post(data, function (response) {
-            storage_service.setUserModel(response.data);
-            success(response);
-        }, function (err) {
-            error(err);
-        });
-    }
+    // const params = routing_service.parseQuery(storage_service.get('login-redirect-url').split('?')[1]);
+    // const code = params['code'];
+    // if (code) {
+    //     const google_session_create_model = new GoogleSessionCreateModel();
+    //     google_session_create_model.code = code;
+    //     let data = {
+    //         path: ApiUrlsConstant.SESSION + '/google',
+    //         model: {
+    //             code : code
+    //         },
+    //     }
+    //     console.log('data',data);
+    //     rest.post(data, function (response) {
+    //         storage_service.setUserModel(response.data);
+    //         success(response);
+    //     }, function (err) {
+    //         error(err);
+    //     });
+    // }
 
+}
+
+
+/**
+ * @param {string} session_id The date
+ */
+function getSession(session_id,success, error) {
+    let data = {
+        path: ApiUrlsConstant.SESSION + '/'+session_id,
+    }
+    rest.get(data, function (response) {
+        console.log('response',response);
+        storage_service.setUserModel(response.data);
+        success(response);
+    }, function (err) {
+        console.log('err',err);
+        error(err)
+    });
 }
 
 
@@ -368,20 +410,45 @@ var loading_service = new LoadingService();
 var alert_service = new AlertService();
 var routing_service = new RoutingService();
 var http_status_service = new HttpStatusService();
-
-
+var storage_service = new StorageService();
+var session = new Session();
 // Login API START
 function login() {
     loading_service.open('.yt-loading');
-    getSessionUrl(function success(response) {
-            loading_service.close('.yt-loading');
-            routing_service.locationHref(response.data);
-        },
-        function error(err) {
-            loading_service.close('.yt-loading');
-            http_status_service.errorHandler(err);
-        }
-    );
+    const session_id = storage_service.get('session_id');
+    if(session_id){
+        getSession(session_id,function success(response) {
+                routing_service.pageRedirectByUrl(SiteInfoConstant.PAGE_INDEX);
+                loading_service.close('.yt-loading');
+                session = response.data;
+                loginManagement();
+            },
+            function error(err) {
+                loading_service.close('.yt-loading');
+                http_status_service.errorHandler(err);
+                logoutManagement();
+            }
+        );
+    }else{
+        getSessionUrl(function success(response) {
+                loading_service.close('.yt-loading');
+                routing_service.locationHref(response.data);
+            },
+            function error(err) {
+                loading_service.close('.yt-loading');
+                http_status_service.errorHandler(err);
+            }
+        );
+    }
+}
+
+
+function loginManagement(){
+    $('.yt-header-toplinks').addClass('show');
+    $('#link-username').text(session.name);
+}
+function logoutManagement(){
+    $('.yt-header-toplinks').removeClass('show');
 }
 
 $('#button-login').click(function () {
@@ -390,20 +457,25 @@ $('#button-login').click(function () {
 
 $('#link-logout').click(function () {
     routing_service.pageRedirectByUrl(SiteInfoConstant.PAGE_LOGIN);
+    storage_service.removeSessionID();
+    storage_service.removeUserData();
+    logoutManagement();
 });
-$('#link-channel').click(function () {
-    routing_service.locationHref('https://www.youtube.com/channel/UCve_taYp1VAd_WWg0lDMNlg?view_as=subscriber');
-})
 
-$('#link-payment').click(function () {
-    routing_service.locationHref(SiteInfoConstant.PAYMENT_URL);
-})
+
+$('#link-videos').click(function () {
+    routing_service.locationHref(SiteInfoConstant.VIDEOS);
+});
+
+$('#link-buy').click(function () {
+    routing_service.locationHref(SiteInfoConstant.BUY_URL);
+});
 $('#link-tos').click(function () {
     routing_service.locationHref(SiteInfoConstant.TOS_URL);
-})
+});
 $('#link-faq').click(function () {
     routing_service.locationHref(SiteInfoConstant.FAQ_URL);
-})
+});
 
 
 $('#button-watch-subs-like').click(function () {
@@ -417,22 +489,6 @@ $('#button-skip').click(function () {
 });
 
 (function () {
-    console.log(' location.href ', location.href);
-    createSession(function success(response) {
-            routing_service.pageRedirectByUrl(SiteInfoConstant.PAGE_INDEX);
-            console.log('response', response)
-        },
-        function error(err) {
-            loading_service.close('.yt-loading');
-            http_status_service.errorHandler(err);
-        }
-    );
+    login();
 })();
 
-chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-        // listen for messages sent from background.js
-        if (request.message === 'hello!') {
-            console.log(request.url) // new url is now in content scripts!
-        }
-    });

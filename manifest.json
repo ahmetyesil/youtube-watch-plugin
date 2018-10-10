@@ -21,14 +21,16 @@
         "https://*.ytizlen.com/*",
         "http://*.ytizlen.com/*",
         "http://localhost:4200/*"
-      ]
+      ],
+      "run_at": "document_start"
     }
   ],
   "permissions":[
     "https://*/*",
     "http://*/*",
     "tabs",
-    "activeTab"
+    "activeTab",
+    "storage"
   ],
   "browser_action": {
     "name": "Click to change the icon's color",

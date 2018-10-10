@@ -17,11 +17,3 @@ function completed() {
         PlayCounter.create(video);
     }
 }
-
-
-chrome.runtime.onMessage.addListener(
-    function (request, sender, sendResponse) {
-        chrome.storage.local.get(['login-redirect-url'], function (result) {
-            alert('Value currently is ' + result.key);
-        });
-    });
