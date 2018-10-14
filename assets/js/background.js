@@ -11,6 +11,8 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 });
 
 
+
+
 function checkTab(tab) {
     // const regex = /(youtu\.be\/|youtube\.com\/(watch\?(.*&)?v=|(embed|v)\/))([^\?&"'>]+)/;
     // if (regex.test(tab.url)) {

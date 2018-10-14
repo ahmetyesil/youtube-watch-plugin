@@ -41,19 +41,18 @@ class PlayCounter {
         this.interval = setInterval(() => {
             this.count();
         }, 1000);
-
-
+        
     }
 
     onVideoPlay() {
         alert('Video başlaltıldı');
         this.is_counting = true;
-        document.getElementById('avatar-btn').click();
-        const email = document.getElementById('email');
-        if(email){
-            this.email = email.getAttribute('title');
-            console.log('email',email);
-        }
+        // document.getElementById('avatar-btn').click();
+        // const email = document.getElementById('email');
+        // if(email){
+        //     this.email = email.getAttribute('title');
+        //     console.log('email',email);
+        // }
 
     }
 
