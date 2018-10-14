@@ -6,21 +6,13 @@ class PlayCounter {
         this.video_number_list = [];
         this.interval = null;
         PlayCounter.instance = this;
-        createSession(function success(response) {
-                routing_service.pageRedirectByUrl(SiteInfoConstant.PAGE_INDEX);
-                console.log('response',response)
-            },
-            function error(err) {
-                loading_service.close('.yt-loading');
-                http_status_service.errorHandler(err);
-            }
-        );
     }
 
     static create(video) {
         const instance = new PlayCounter();
         instance.initialize(video);
     }
+
 
     initialize(video) {
         this.video = video;
@@ -49,6 +41,8 @@ class PlayCounter {
         this.interval = setInterval(() => {
             this.count();
         }, 1000);
+
+
     }
 
     onVideoPlay() {

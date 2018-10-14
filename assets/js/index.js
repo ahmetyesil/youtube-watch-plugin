@@ -71,7 +71,15 @@ $('#link-faq').click(function () {
 
 
 $('#button-watch-subs-like').click(function () {
-    routing_service.locationHref('https://www.youtube.com/watch?v=KklDe7HnbTY&list=PLs8GsV2H1tV8E9B6QzptvUwHXAN6sUxRI');
+    loading_service.open('.yt-loading');
+    getVideoForView(function success(response) {
+            loading_service.close('.yt-loading');
+            routing_service.locationHref(response.data.url,true);
+        },
+        function error(err) {
+            loading_service.close('.yt-loading');
+            http_status_service.errorHandler(err);
+        })
 });
 $('#button-confirm').click(function () {
     alert('confirm event')

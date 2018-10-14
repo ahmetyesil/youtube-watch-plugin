@@ -10,10 +10,17 @@ class RoutingService {
         }
     }
 
-    locationHref(url) {
-        chrome.tabs.update(null, {
-            url: url
-        });
+    locationHref(url,new_tab) {
+        if(new_tab){
+            chrome.tabs.create({'url':url}, function(tab) {
+                console.log('Tab Created ' + tab.id);
+            });
+        }else{
+            chrome.tabs.update(null, {
+                url: url
+            });
+        }
+
     }
 
     pageRouting() {

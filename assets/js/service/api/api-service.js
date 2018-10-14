@@ -23,32 +23,6 @@ function getSessionUrl(success, error) {
 }
 
 
-/**
- * @param {registerModel} register_model The date
- */
-function createSession(success, error) {
-    // const params = routing_service.parseQuery(storage_service.get('login-redirect-url').split('?')[1]);
-    // const code = params['code'];
-    // if (code) {
-    //     const google_session_create_model = new GoogleSessionCreateModel();
-    //     google_session_create_model.code = code;
-    //     let data = {
-    //         path: ApiUrlsConstant.SESSION + '/google',
-    //         model: {
-    //             code : code
-    //         },
-    //     }
-    //     console.log('data',data);
-    //     rest.post(data, function (response) {
-    //         storage_service.setUserModel(response.data);
-    //         success(response);
-    //     }, function (err) {
-    //         error(err);
-    //     });
-    // }
-
-}
-
 
 /**
  * @param {string} session_id The date
@@ -68,15 +42,16 @@ function getSession(session_id,success, error) {
 }
 
 
-/**
- * @param {forgotPasswordModel} forgot_password_model The date
- */
-function forgotPassword(forgot_password_model, success, error) {
 
+/**
+ * @param {Session}  The date
+ */
+function getVideoForView(success, error) {
     let data = {
-        path: ApiUrlsConstant.FORGOT_PASSWORD,
-        model: forgot_password_model,
+        path: ApiUrlsConstant.VIDEO + '/for-view' ,
     }
-    rest.post(data, success, error);
+    rest.get(data, success, error);
 }
+
+
 

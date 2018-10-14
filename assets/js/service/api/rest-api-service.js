@@ -1,3 +1,5 @@
+var storage_service = new StorageService();
+
 RestClient = function (goptions) {
     this.goptions = goptions;
 
@@ -13,6 +15,11 @@ RestClient = function (goptions) {
     var doAjax = function (method, gopts, opts,success,error) {
         var dt = opts.dataType ? opts.dataType : (gopts.dataType ? gopts.dataType : constants.dataType);
         console.log('dt',dt);
+        if(opts.headers){
+            opts.headers.append(HTTPHeaders.SESSION_ID, this.storage_service.getSessionID());
+        }else{
+            opts.headers = {'Session-ID':this.storage_service.getSessionID()}
+        }
 
         $.when($.ajax({
             type: method,
@@ -39,6 +46,8 @@ RestClient = function (goptions) {
                 : !constants.synchronous)
         }));
     };
+
+
 
     this.post = function (opts,success,error) {
         doAjax('POST', this.goptions, opts,success,error);
