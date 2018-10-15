@@ -1,3 +1,6 @@
+
+
+
 {
   "name": "A browser action which changes its icon when clicked",
   "description": "Click browser action icon to change color!",
@@ -11,19 +14,15 @@
   },
   "content_scripts": [
     {
+      "css": ["./dist/css/style.min.css"],
       "js": [
-        "/assets/js/play-counter.js",
-        "/assets/js/page.js"
+        "./assets/js/start.js"
       ],
-      "matches": [
-        "https://*.youtube.com/*"
-//        "https://*.ytizlen.com/*",
-//        "http://*.ytizlen.com/*",
-//        "http://localhost:4200/*"
-      ],
+      "matches": ["http://www.youtube.com/*", "http://youtube.com/*", "https://www.youtube.com/*", "https://youtube.com/*"],
       "run_at": "document_start"
     }
   ],
+  "web_accessible_resources": ["./assets/js/main.js","index.html"],
   "permissions":[
     "https://*/*",
     "http://*/*",
@@ -32,9 +31,8 @@
     "storage"
   ],
   "browser_action": {
-    "name": "Click to change the icon's color",
-    "default_icon": "/assets/images/icon1.png",
-    "default_popup": "index.html"
+    "default_icon": "/assets/images/icon1.png"
+//    "default_popup": "index.html"
   },
   "manifest_version": 2
 }

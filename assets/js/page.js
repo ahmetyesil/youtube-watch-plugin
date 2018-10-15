@@ -1,5 +1,4 @@
 if (document.readyState === 'loading') {
-    alert(document.readyState);
     document.addEventListener("DOMContentLoaded", function () {
         completed();
     }, false);
@@ -16,7 +15,6 @@ if (document.readyState === 'loading') {
 
 
 function completed() {
-    alert('bu nedir?');
     // video-stream html5-main-video
     const videos = document.getElementsByTagName('video');
     // atr_challenge : bu input[type=hidden] elementinde videonun id bilgileri bulunuyor. kullanabiliriz.

@@ -282,9 +282,10 @@ function getSession(session_id,success, error) {
 }
 
 
-
 /**
- * @param {Session}  The date
+ *
+ * @param success
+ * @param error
  */
 function getVideoForView(success, error) {
     let data = {
@@ -294,6 +295,16 @@ function getVideoForView(success, error) {
 }
 
 
+/**
+ * @param {VideoVievCreateModel} video_view_create_model The date
+ */
+function  videoViewCreate(video_view_create_model,success, error) {
+    let data = {
+        path: ApiUrlsConstant.VIDEO + '/video-view' ,
+        model:video_view_create_model
+    }
+    rest.post(data, success, error);
+}
 
 
 class LoadingService {
@@ -442,6 +453,7 @@ function logoutManagement(){
 
 $('#button-login').click(function () {
     login();
+
 });
 
 $('#link-logout').click(function () {

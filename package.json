@@ -4,7 +4,17 @@
   "description": "",
   "main": "gulpfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "clean": "rimraf dist && mkdir dist",
+
+    "js": "uglifyjs src/start.js > dist/start.js & uglifyjs -c drop_console=true src/main.js > dist/main.js",
+    "json": "json-minify src/manifest.json > dist/manifest.json",
+
+    "copy": "node build.js copy",
+
+    "build": "npm run clean & npm run js & npm run json & npm run copy",
+    "postjs": "node build.js replaceJS",
+    "postjson": "node build.js replaceJSON",
+    "postbuild": "node build.js buildZip"
   },
   "repository": {
     "type": "git",
@@ -26,7 +36,12 @@
     "jquery-ui-dist": "^1.12.1",
     "jquery-validation": "^1.18.0",
     "normalize.css": "^8.0.0",
-    "querystring": "^0.2.0"
+    "querystring": "^0.2.0",
+    "rimraf": "^2.6.2",
+    "shelljs": "^0.7.8",
+    "uglify-es": "^3.3.2",
+    "zip-dir": "^1.0.2",
+    "json-minify": "^1.0.0"
   },
   "devDependencies": {
     "browser-sync": "^2.24.6",

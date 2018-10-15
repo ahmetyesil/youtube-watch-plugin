@@ -45,6 +45,7 @@ function logoutManagement(){
 
 $('#button-login').click(function () {
     login();
+
 });
 
 $('#link-logout').click(function () {
