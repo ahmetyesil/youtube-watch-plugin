@@ -42,10 +42,9 @@ function getSession(session_id,success, error) {
 }
 
 
+
 /**
- *
- * @param success
- * @param error
+ * @param {Session}  The date
  */
 function getVideoForView(success, error) {
     let data = {
@@ -55,14 +54,4 @@ function getVideoForView(success, error) {
 }
 
 
-/**
- * @param {VideoVievCreateModel} video_view_create_model The date
- */
-function  videoViewCreate(video_view_create_model,success, error) {
-    let data = {
-        path: ApiUrlsConstant.VIDEO + '/video-view' ,
-        model:video_view_create_model
-    }
-    rest.post(data, success, error);
-}
 

@@ -1,3 +1,15 @@
+var browser = self.browser;
+if (typeof browser === "undefined") {
+    browser = self.chrome;
+}
+
+// Try cloud sync, else fallback to localstorage
+var storage = browser.storage.sync;
+if (typeof storage === "undefined") {
+    storage = browser.storage.local;
+}
+var session_id;
+
 chrome.tabs.onActiveChanged.addListener(function (tab_id) {
     chrome.tabs.getSelected(null, function (tab) {
         checkTab(tab);
@@ -9,8 +21,6 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
         checkTab(tab);
     }
 });
-
-
 
 
 function checkTab(tab) {
@@ -29,12 +39,22 @@ function checkTab(tab) {
         // alert('tab.id'+tab.url);
         // alert(chrome.tabs.executeScript(tab.id, {code: code}));
         chrome.tabs.executeScript(tab.id, {code: 'localStorage.getItem("storage_session_id");'}, function (storage_session_id) {
-
-            if(storage_session_id && storage_session_id !== "" && storage_session_id !== '' && storage_session_id !== null){
-                localStorage.setItem("session_id",storage_session_id);
+            if (storage_session_id && storage_session_id !== "" && storage_session_id !== '' && storage_session_id !== null) {
+                localStorage.setItem("session_id", storage_session_id);
+                session_id = storage_session_id;
             }
-
         });
     }
+
+    chrome.tabs.query({url: "https://www.youtube.com/*"}, function (tabs) {
+        tabs.forEach(function (tab) {
+            // alert('storage_session_id:' + session_id);
+            chrome.tabs.executeScript(tab.id, {code: 'localStorage.setItem("session_id",' + session_id + ');'}, function (d) {
+                console.log('d',d);
+            });
+        });
+    });
+
+
 }
 

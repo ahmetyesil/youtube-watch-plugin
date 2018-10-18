@@ -1,4 +1,4 @@
-class VideoViewCreateModel {
+class videoViewCreateModel {
     constructor() {
         /** @var string */
          this.video_id = null;
